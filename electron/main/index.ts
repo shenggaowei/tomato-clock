@@ -1,8 +1,8 @@
-import { app, BrowserWindow, shell, ipcMain } from 'electron'
+import { BrowserWindow, app, ipcMain, shell } from 'electron'
 import { createRequire } from 'node:module'
-import { fileURLToPath } from 'node:url'
-import path from 'node:path'
 import os from 'node:os'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 
 const require = createRequire(import.meta.url)
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -46,26 +46,36 @@ async function createWindow() {
   win = new BrowserWindow({
     title: 'Main window',
     icon: path.join(process.env.VITE_PUBLIC, 'favicon.ico'),
+    width: 70,
+    height: 34,
+    type: "toolbar",
+    frame: false,
+    resizable: false,
+    transparent: true,
+    alwaysOnTop: true,
     webPreferences: {
       preload,
       // Warning: Enable nodeIntegration and disable contextIsolation is not secure in production
       // nodeIntegration: true,
-
       // Consider using contextBridge.exposeInMainWorld
       // Read more on https://www.electronjs.org/docs/latest/tutorial/context-isolation
       // contextIsolation: false,
     },
   })
 
+  ipcMain.on("suspensionWindowMove", (channel, args) => {
+    win.setBounds({ x: args.x, y: args.y, width: 70, height: 34 })
+  });
+
   if (VITE_DEV_SERVER_URL) { // #298
     win.loadURL(VITE_DEV_SERVER_URL)
     // Open devTool if the app is not packaged
-    win.webContents.openDevTools()
+    //win.webContents.openDevTools()
   } else {
     win.loadFile(indexHtml)
   }
 
-  // Test actively push message to the Electron-Renderer
+  // Test actively push message to the Electron-Renderer测
   win.webContents.on('did-finish-load', () => {
     win?.webContents.send('main-process-message', new Date().toLocaleString())
   })
