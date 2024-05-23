@@ -1,4 +1,4 @@
-import { BrowserWindow, app, ipcMain, shell } from 'electron'
+import { BrowserWindow, Notification, app, ipcMain, shell } from 'electron'
 import { createRequire } from 'node:module'
 import os from 'node:os'
 import path from 'node:path'
@@ -66,6 +66,13 @@ async function createWindow() {
   ipcMain.on("suspensionWindowMove", (channel, args) => {
     win.setBounds({ x: args.x, y: args.y, width: 70, height: 34 })
   });
+
+  ipcMain.on('showNotification', (channel, args) => {
+    new Notification({
+      title: "测试 title",
+      body: "不错的提醒"
+    }).show()
+  })
 
   if (VITE_DEV_SERVER_URL) { // #298
     win.loadURL(VITE_DEV_SERVER_URL)

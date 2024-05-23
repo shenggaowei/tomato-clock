@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import TimeTomato from "./components/TimeTomato.vue";
+import CountDown from "./views/countDown/index.vue";
 </script>
 
 <template>
-  <TimeTomato />
+  <CountDown />
 </template>
