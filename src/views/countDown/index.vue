@@ -17,7 +17,7 @@ import useDrag from "../../hooks/useDrag";
 import PauseComponent from "./components/pause.vue";
 import StartComponent from "./components/start.vue";
 
-const defaultTime = 25 * 60;
+const defaultTime = 1 * 10;
 const domRef = ref<HTMLElement>();
 const initTimeRef = ref(defaultTime);
 
@@ -30,6 +30,7 @@ const showTimeRef = computed(() => {
 const countDown = () => {
   if (initTimeRef.value === 0) {
     interValHandler.pause();
+    window.ipcRenderer.send("showNotification");
     return;
   }
   initTimeRef.value--;
@@ -38,7 +39,6 @@ const countDown = () => {
 const interValHandler = useIntervalFn(countDown, 1000, { immediate: false });
 
 const handleClickStartCountDown = () => {
-  window.ipcRenderer.send("showNotification");
   interValHandler.resume();
 };
 
@@ -57,7 +57,6 @@ useDrag(domRef);
   user-select: none;
   overflow: hidden;
   position: relative;
-  transform: translate(2px, 2px);
   border-radius: 4px;
 
   .showTime {
