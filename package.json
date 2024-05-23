@@ -38,6 +38,8 @@
   },
   "dependencies": {
     "@types/lodash-es": "^4.17.12",
+    "@vueuse/core": "^10.9.0",
+    "dayjs": "^1.11.11",
     "lodash-es": "^4.17.21"
   }
 }

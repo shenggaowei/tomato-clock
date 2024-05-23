@@ -1,12 +1,34 @@
 <template>
-  <div ref="domRef" :class="style.container">测试</div>
+  <div @click="handleClickStartCountDown" ref="domRef" :class="style.container">{{ showTimeRef }}</div>
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { useIntervalFn } from "@vueuse/core";
+import { computed, ref } from "vue";
 import useDrag from "../hooks/useDrag";
 
 const domRef = ref<HTMLElement>();
+const initTimeRef = ref(25 * 60);
+
+const showTimeRef = computed(() => {
+  const minute = Math.floor(initTimeRef.value / 60);
+  const second = initTimeRef.value % 60;
+  return `${minute < 10 ? "0" + minute : minute}:${second < 10 ? "0" + second : second}`;
+});
+
+const countDown = () => {
+  if (initTimeRef.value === 0) {
+    interValHandler.pause();
+    return;
+  }
+  initTimeRef.value--;
+};
+
+const interValHandler = useIntervalFn(countDown, 1000, { immediate: false });
+
+const handleClickStartCountDown = () => {
+  interValHandler.resume();
+};
 
 useDrag(domRef);
 </script>
