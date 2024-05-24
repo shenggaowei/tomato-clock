@@ -64,7 +64,7 @@ async function createWindow() {
   })
 
   ipcMain.on("suspensionWindowMove", (channel, args) => {
-    win.setBounds({ x: args.x, y: args.y, width: 70, height: 34 })
+    win.setBounds({ x: args.x, y: args.y, width: 80, height: 40 })
   });
 
   ipcMain.on('showNotification', (channel, args) => {
