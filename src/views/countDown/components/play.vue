@@ -1,7 +1,6 @@
 <template>
   <div :class="style.container">
-    <SvgIcon @click="handleClickPause" :class="style.icon" iconName="icon-pause2" />
-    <SvgIcon @click="handleClickReset" :class="[style.icon, style.icon_stop]" iconName="icon-stop" />
+    <SvgIcon @click="handleClickStart" :class="style.icon" iconName="icon-play" />
   </div>
 </template>
 
@@ -9,18 +8,13 @@
 import SvgIcon from "@/components/Icon/index.vue";
 
 interface IEmits {
-  (e: "onClickPause"): void;
-  (e: "onClickReset"): void;
+  (e: "onClickStart"): void;
 }
 
 const emits = defineEmits<IEmits>();
 
-const handleClickPause = () => {
-  emits("onClickPause");
-};
-
-const handleClickReset = () => {
-  emits("onClickReset");
+const handleClickStart = () => {
+  emits("onClickStart");
 };
 </script>
 
@@ -39,10 +33,6 @@ const handleClickReset = () => {
   .icon {
     cursor: pointer;
     font-size: 18px;
-
-    &_stop {
-      margin-left: 4px;
-    }
   }
 }
 </style>

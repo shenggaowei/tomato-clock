@@ -1,25 +1,45 @@
 <template>
-  <div ref="domRef" :class="style.container">
-    <div :class="style.showTime">{{ showTimeRef }}</div>
-    <StartComponent
-      v-if="!interValHandler.isActive.value"
+  <div :class="style.container">
+    <div :class="style.showTime">
+      {{ showTimeRef }}
+    </div>
+    <Pause
+      v-show="tomatoState === ETomatoState.Timing"
+      @on-click-pause="handleClickPauseCountDown"
+      @on-click-reset="handleClickReset"
+      :class="style.maskContent"
+    />
+    <Play
+      v-show="tomatoState === ETomatoState.PAUSE || tomatoState === ETomatoState.INIT"
       @on-click-start="handleClickStartCountDown"
       :class="style.maskContent"
     />
-    <PauseComponent v-else @on-click-pause="handleClickPauseCountDown" :class="style.maskContent" />
+    <FinishComponent
+      @on-click-start-from-start-time="handleClickStartCountDownFromStartTime"
+      @on-click-start-rest="emits('on-click-start-rest')"
+      v-show="tomatoState === ETomatoState.Finish"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
+import { tomatoConfig } from "@/utils/const";
+import { ETomatoState, ETomatoType } from "@/utils/type";
 import { useIntervalFn } from "@vueuse/core";
 import { computed, ref } from "vue";
-import useDrag from "../../hooks/useDrag";
-import PauseComponent from "./components/pause.vue";
-import StartComponent from "./components/start.vue";
+import FinishComponent from "./components/finish.vue";
+import Pause from "./components/pause.vue";
+import Play from "./components/play.vue";
 
-const defaultTime = 1 * 10;
-const domRef = ref<HTMLElement>();
-const initTimeRef = ref(defaultTime);
+interface IEmits {
+  (e: "on-click-start-rest"): void;
+}
+
+const emits = defineEmits<IEmits>();
+
+const { duration } = tomatoConfig[ETomatoType.CountDown];
+const initTimeRef = ref(duration);
+const tomatoState = ref(ETomatoState.INIT);
 
 const showTimeRef = computed(() => {
   const minute = Math.floor(initTimeRef.value / 60);
@@ -27,37 +47,51 @@ const showTimeRef = computed(() => {
   return `${minute < 10 ? "0" + minute : minute}:${second < 10 ? "0" + second : second}`;
 });
 
-const countDown = () => {
+// 倒计时结束回调
+const countDownFinishCallback = () => {
   if (initTimeRef.value === 0) {
+    tomatoState.value = ETomatoState.Finish;
     interValHandler.pause();
-    window.ipcRenderer.send("showNotification");
+    initTimeRef.value = duration;
+    window.ipcRenderer.send("showNotification", {});
     return;
   }
   initTimeRef.value--;
 };
 
-const interValHandler = useIntervalFn(countDown, 1000, { immediate: false });
+// 轮训倒计时
+const interValHandler = useIntervalFn(countDownFinishCallback, 1000, { immediate: false });
 
+// 开启计时器
 const handleClickStartCountDown = () => {
   interValHandler.resume();
+  tomatoState.value = ETomatoState.Timing;
 };
 
+// 从头开启计时器
+const handleClickStartCountDownFromStartTime = () => {
+  initTimeRef.value = duration;
+  interValHandler.resume();
+  tomatoState.value = ETomatoState.Timing;
+};
+
+// 暂停计时器
 const handleClickPauseCountDown = () => {
   interValHandler.pause();
+  tomatoState.value = ETomatoState.PAUSE;
 };
 
-useDrag(domRef);
+// 重置计时器
+const handleClickReset = () => {
+  interValHandler.pause();
+  tomatoState.value = ETomatoState.INIT;
+  initTimeRef.value = duration;
+};
 </script>
 
 <style lang="scss" module="style">
 .container {
-  width: 70px;
-  height: 34px;
-  background: rgba(255, 255, 255, 0.95);
-  user-select: none;
-  overflow: hidden;
   position: relative;
-  border-radius: 4px;
 
   .showTime {
     text-align: center;
@@ -65,7 +99,8 @@ useDrag(domRef);
     height: 100%;
     line-height: 34px;
     font-size: 16px;
-    font-weight: 600;
+    font-weight: bold;
+    color: #000;
   }
 
   &:hover .maskContent {
@@ -74,7 +109,7 @@ useDrag(domRef);
   }
 
   .maskContent {
-    transition: visibility 0s, opacity 0.3s linear;
+    transition: visibility 0.3s, opacity 0.3s linear;
     visibility: hidden;
     opacity: 0;
   }

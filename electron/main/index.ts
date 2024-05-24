@@ -46,8 +46,8 @@ async function createWindow() {
   win = new BrowserWindow({
     title: 'Main window',
     icon: path.join(process.env.VITE_PUBLIC, 'favicon.ico'),
-    width: 70,
-    height: 34,
+    width: 80,
+    height: 40,
     type: "toolbar",
     frame: false,
     resizable: false,
@@ -69,15 +69,15 @@ async function createWindow() {
 
   ipcMain.on('showNotification', (channel, args) => {
     new Notification({
-      title: "测试 title",
-      body: "不错的提醒"
+      title: args.title || "番茄钟",
+      body: args.body || "您完成了一个番茄"
     }).show()
   })
 
   if (VITE_DEV_SERVER_URL) { // #298
     win.loadURL(VITE_DEV_SERVER_URL)
     // Open devTool if the app is not packaged
-    //win.webContents.openDevTools()
+    // win.webContents.openDevTools({ mode: 'detach' })
   } else {
     win.loadFile(indexHtml)
   }
