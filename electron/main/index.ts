@@ -42,7 +42,8 @@ let win: BrowserWindow | null = null
 let tray: Tray | null = null;
 const preload = path.join(__dirname, '../preload/index.mjs')
 const indexHtml = path.join(RENDERER_DIST, 'index.html')
-const iconPath = path.join(__dirname, "../../src/assets/images/logo.png")
+const iconPath = path.join(process.env.VITE_PUBLIC, "logo.png")
+const logoPath = path.join(process.env.VITE_PUBLIC, "logo.ico")
 
 const createTray = () => {
   const icon = nativeImage.createFromPath(iconPath)
@@ -58,7 +59,7 @@ const createTray = () => {
 async function createWindow() {
   win = new BrowserWindow({
     title: '芒果钟',
-    icon: iconPath,
+    icon: nativeImage.createFromPath(logoPath),
     width: 80,
     height: 40,
     type: "toolbar",
@@ -109,8 +110,8 @@ async function createWindow() {
 }
 
 app.whenReady().then(() => {
-  createTray()
   createWindow()
+  createTray()
 })
 
 app.on('window-all-closed', () => {
