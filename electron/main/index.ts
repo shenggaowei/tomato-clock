@@ -1,4 +1,4 @@
-import { BrowserWindow, Notification, app, ipcMain, shell } from 'electron'
+import { BrowserWindow, Menu, Notification, Tray, app, ipcMain, nativeImage, shell } from 'electron'
 import { createRequire } from 'node:module'
 import os from 'node:os'
 import path from 'node:path'
@@ -39,10 +39,21 @@ if (!app.requestSingleInstanceLock()) {
 }
 
 let win: BrowserWindow | null = null
+let tray: Tray | null = null;
 const preload = path.join(__dirname, '../preload/index.mjs')
 const indexHtml = path.join(RENDERER_DIST, 'index.html')
+const iconPath = path.join(__dirname, "../../src/assets/images/logo.png")
 
 async function createWindow() {
+  const icon = nativeImage.createFromPath(iconPath)
+  tray = new Tray(icon)
+  const contextMenu = Menu.buildFromTemplate([
+    { label: '退出', type: 'normal', click: () => app.quit() },
+  ])
+  tray.setContextMenu(contextMenu)
+  tray.setToolTip('芒果钟')
+  tray.setTitle('芒果钟')
+
   win = new BrowserWindow({
     title: 'Main window',
     icon: path.join(process.env.VITE_PUBLIC, 'favicon.ico'),

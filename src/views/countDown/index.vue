@@ -99,7 +99,6 @@ const handleClickReset = () => {
     height: 100%;
     line-height: 34px;
     font-size: 16px;
-    font-weight: bold;
     color: #000;
   }
 

@@ -93,7 +93,6 @@ const handleClickStop = () => {
     height: 100%;
     line-height: 34px;
     font-size: 16px;
-    font-weight: bold;
     color: green;
   }
 
