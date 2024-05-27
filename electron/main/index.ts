@@ -44,7 +44,7 @@ const preload = path.join(__dirname, '../preload/index.mjs')
 const indexHtml = path.join(RENDERER_DIST, 'index.html')
 const iconPath = path.join(__dirname, "../../src/assets/images/logo.png")
 
-async function createWindow() {
+const createTray = () => {
   const icon = nativeImage.createFromPath(iconPath)
   tray = new Tray(icon)
   const contextMenu = Menu.buildFromTemplate([
@@ -53,7 +53,9 @@ async function createWindow() {
   tray.setContextMenu(contextMenu)
   tray.setToolTip('芒果钟')
   tray.setTitle('芒果钟')
+}
 
+async function createWindow() {
   win = new BrowserWindow({
     title: 'Main window',
     icon: path.join(process.env.VITE_PUBLIC, 'favicon.ico'),
@@ -106,7 +108,10 @@ async function createWindow() {
   // win.webContents.on('will-navigate', (event, url) => { }) #344
 }
 
-app.whenReady().then(createWindow)
+app.whenReady().then(() => {
+  createTray()
+  createWindow()
+})
 
 app.on('window-all-closed', () => {
   win = null
