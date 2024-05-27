@@ -1,5 +1,6 @@
 {
   "name": "MangoPomodoro",
+  "productName": "芒果钟",
   "version": "1.0.0",
   "main": "dist-electron/main/index.js",
   "description": "Pomodoro Technique",

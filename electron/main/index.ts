@@ -57,8 +57,8 @@ const createTray = () => {
 
 async function createWindow() {
   win = new BrowserWindow({
-    title: 'Main window',
-    icon: path.join(process.env.VITE_PUBLIC, 'favicon.ico'),
+    title: '芒果钟',
+    icon: iconPath,
     width: 80,
     height: 40,
     type: "toolbar",
