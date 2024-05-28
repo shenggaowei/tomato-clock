@@ -1,4 +1,4 @@
-import { BrowserWindow, Menu, Notification, Tray, app, ipcMain, nativeImage, shell } from 'electron'
+import { BrowserWindow, Menu, Notification, Tray, app, ipcMain, nativeImage, screen, shell } from 'electron'
 import { createRequire } from 'node:module'
 import os from 'node:os'
 import path from 'node:path'
@@ -77,10 +77,23 @@ async function createWindow() {
     },
   })
 
+  const winBounds = win.getBounds();
+  const winScreen = screen.getDisplayNearestPoint({ x: winBounds.x, y: winBounds.y });
+
+  // 鼠标抬起后，进行边缘检测
+  ipcMain.on('onMouseUp', (channel, args) => {
+    const { width: screenWidth } = winScreen.bounds
+    if (args.x + 80 >= screenWidth || args.x <= 0) {
+      win.webContents.send('testWindowOnScreenEdge')
+    }
+  })
+
+  // 鼠标拖拽
   ipcMain.on("suspensionWindowMove", (channel, args) => {
     win.setBounds({ x: args.x, y: args.y, width: 80, height: 40 })
   });
 
+  // 番茄完成后显示通知
   ipcMain.on('showNotification', (channel, args) => {
     new Notification({
       title: args.title || "番茄钟",

@@ -4,8 +4,13 @@ function useDrag(ele: Ref<HTMLElement | undefined>) {
     const x = ref(0);
     const y = ref(0);
 
-
-    const upEvent = () => {
+    const upEvent = (e: MouseEvent) => {
+        // 鼠标抬起，检测是否贴边
+        window.ipcRenderer.send('onMouseUp', {
+            x: e.screenX - x.value,
+            y: e.screenY - y.value
+        })
+        // 重置鼠标按下的 x y 坐标
         x.value = 0;
         y.value = 0;
         document.removeEventListener("mousemove", moveEvent);
@@ -37,6 +42,9 @@ function useDrag(ele: Ref<HTMLElement | undefined>) {
 
     onMounted(() => {
         initSuspension();
+        window.ipcRenderer.on('testWindowOnScreenEdge', () => {
+            alert('我贴边了')
+        })
     });
 }
 
