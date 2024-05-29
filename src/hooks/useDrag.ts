@@ -1,8 +1,18 @@
 import { onMounted, ref, Ref } from "vue";
+
+
+export enum ENearTheScreenEdgeType {
+    TOP = "top",
+    BOTTOM = "bottom",
+    LEFT = "left",
+    RIGHT = "right",
+}
+
 function useDrag(ele: Ref<HTMLElement | undefined>) {
 
     const x = ref(0);
     const y = ref(0);
+    const edgeRef = ref<ENearTheScreenEdgeType>()
 
     const upEvent = (e: MouseEvent) => {
         // 鼠标抬起，检测是否贴边
@@ -42,10 +52,14 @@ function useDrag(ele: Ref<HTMLElement | undefined>) {
 
     onMounted(() => {
         initSuspension();
-        window.ipcRenderer.on('testWindowOnScreenEdge', () => {
-            alert('我贴边了')
+        window.ipcRenderer.on('testWindowOnScreenEdge', (channel, args: any) => {
+            edgeRef.value = args.edge
         })
     });
+
+    return {
+        edgeRef
+    }
 }
 
 export default useDrag

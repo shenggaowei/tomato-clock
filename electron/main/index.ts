@@ -3,6 +3,7 @@ import { createRequire } from 'node:module'
 import os from 'node:os'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { ENearTheScreenEdgeType } from '../../src/hooks/useDrag'
 
 const require = createRequire(import.meta.url)
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -82,9 +83,15 @@ async function createWindow() {
 
   // 鼠标抬起后，进行边缘检测
   ipcMain.on('onMouseUp', (channel, args) => {
-    const { width: screenWidth } = winScreen.bounds
-    if (args.x + 80 >= screenWidth || args.x <= 0) {
-      win.webContents.send('testWindowOnScreenEdge')
+    const { width: screenWidth, height: screenHeight } = winScreen.bounds
+    if (args.x + 80 >= screenWidth) {
+      win.webContents.send('testWindowOnScreenEdge', { edge: ENearTheScreenEdgeType.RIGHT })
+    } else if (args.x <= 0) {
+      win.webContents.send('testWindowOnScreenEdge', { edge: ENearTheScreenEdgeType.LEFT })
+    } else if (args.y + 40 >= screenHeight) {
+      win.webContents.send('testWindowOnScreenEdge', { edge: ENearTheScreenEdgeType.BOTTOM })
+    } else if (args.y <= 0) {
+      win.webContents.send('testWindowOnScreenEdge', { edge: ENearTheScreenEdgeType.TOP })
     }
   })
 
@@ -108,6 +115,8 @@ async function createWindow() {
   } else {
     win.loadFile(indexHtml)
   }
+
+  win.setAlwaysOnTop(true, 'screen-saver')
 
   // Test actively push message to the Electron-Renderer测
   win.webContents.on('did-finish-load', () => {

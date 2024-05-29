@@ -28,7 +28,7 @@ const handleClickStop = () => {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: rgba(255, 255, 255, 0.95);
+  background-color: rgba(36, 7, 7, 0.95);
 
   .icon {
     cursor: pointer;

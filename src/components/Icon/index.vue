@@ -6,19 +6,16 @@
 
 <script setup lang="ts">
 import { computed } from "vue";
-const props = defineProps({
-  iconName: {
-    type: String,
-    required: true,
-  },
-  className: {
-    type: String,
-    default: "",
-  },
-  color: {
-    type: String,
-    default: "#2c2c2c",
-  },
+
+interface IProps {
+  iconName: string;
+  className?: string;
+  color?: string;
+}
+
+const props = withDefaults(defineProps<IProps>(), {
+  color: "#2c2c2c",
+  className: "",
 });
 
 const iconClassName = computed(() => {
