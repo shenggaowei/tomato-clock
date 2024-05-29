@@ -7,7 +7,6 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
-    ElProgress: typeof import('element-plus/es')['ElProgress']
     Icon: typeof import('./src/components/Icon/index.vue')['default']
     Progress: typeof import('./src/components/Progress/index.vue')['default']
     ProgressMask: typeof import('./src/components/ProgressMask/index.vue')['default']

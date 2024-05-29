@@ -3,6 +3,7 @@ import { createRequire } from 'node:module'
 import os from 'node:os'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+// @ts-ignore
 import { ENearTheScreenEdgeType } from '../../src/hooks/useDrag'
 
 const require = createRequire(import.meta.url)
