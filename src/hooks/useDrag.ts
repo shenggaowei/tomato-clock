@@ -14,6 +14,7 @@ function useDrag(ele: Ref<HTMLElement | undefined>) {
     const y = ref(0);
     const edgeRef = ref<ENearTheScreenEdgeType>()
 
+    // 鼠标抬起 清除状态
     const upEvent = (e: MouseEvent) => {
         // 鼠标抬起，检测是否贴边
         window.ipcRenderer.send('onMouseUp', {
@@ -24,6 +25,7 @@ function useDrag(ele: Ref<HTMLElement | undefined>) {
         x.value = 0;
         y.value = 0;
         document.removeEventListener("mousemove", moveEvent);
+        edgeRef.value = undefined
     };
 
     const moveEvent = (e: MouseEvent) => {

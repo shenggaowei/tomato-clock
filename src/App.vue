@@ -27,9 +27,15 @@ const onClickStartRestCallback = () => {
 
 <template>
   <div ref="domRef" :class="style.container">
-    <CountDown @on-click-start-rest="onClickStartRestCallback" v-if="countDownType === ETomatoType.CountDown" />
-    <RestContDown :state="restCountDownState" @onRestCountDownFinishCallback="onRestCountDownFinishCallback" v-else />
-    <ProgressMask v-show="false" :direction="edgeRef" :class="style.progressMask" />
+    <div v-show="!edgeRef">
+      <CountDown @on-click-start-rest="onClickStartRestCallback" v-show="countDownType === ETomatoType.CountDown" />
+      <RestContDown
+        :state="restCountDownState"
+        @onRestCountDownFinishCallback="onRestCountDownFinishCallback"
+        v-show="countDownType === ETomatoType.Rest"
+      />
+    </div>
+    <ProgressMask v-show="edgeRef" :direction="edgeRef" :class="style.progressMask" />
   </div>
 </template>
 

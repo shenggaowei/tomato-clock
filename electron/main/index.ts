@@ -87,12 +87,16 @@ async function createWindow() {
     const { width: screenWidth, height: screenHeight } = winScreen.bounds
     if (args.x + 80 >= screenWidth) {
       win.webContents.send('testWindowOnScreenEdge', { edge: ENearTheScreenEdgeType.RIGHT })
+      win.setBounds({ x: screenWidth - 20, y: args.y, width: 80, height: 40 })
     } else if (args.x <= 0) {
       win.webContents.send('testWindowOnScreenEdge', { edge: ENearTheScreenEdgeType.LEFT })
+      win.setBounds({ x: -60, y: args.y, width: 80, height: 40 })
     } else if (args.y + 40 >= screenHeight) {
       win.webContents.send('testWindowOnScreenEdge', { edge: ENearTheScreenEdgeType.BOTTOM })
+      win.setBounds({ x: args.x, y: screenHeight - 20, width: 80, height: 40 })
     } else if (args.y <= 0) {
       win.webContents.send('testWindowOnScreenEdge', { edge: ENearTheScreenEdgeType.TOP })
+      win.setBounds({ x: args.x, y: -20, width: 80, height: 40 })
     }
   })
 
