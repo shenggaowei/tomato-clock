@@ -15,7 +15,7 @@
 import { tomatoConfig } from "@/utils/const";
 import { ETomatoRestState, ETomatoType } from "@/utils/type";
 import { useIntervalFn } from "@vueuse/core";
-import { computed, toRef, watch } from "vue";
+import { computed, watch } from "vue";
 import Stop from "./components/stop.vue";
 
 interface IProps {
@@ -32,8 +32,9 @@ const props = withDefaults(defineProps<IProps>(), {
 const emits = defineEmits<IEmits>();
 
 const initTimeRef = defineModel<number>("time", { required: true });
+const tomatoRestState = defineModel("state");
+
 const { duration } = tomatoConfig[ETomatoType.Rest];
-const tomatoRestState = toRef(props, "state");
 
 // 倒计时结束回调
 const countDownFinishCallback = () => {

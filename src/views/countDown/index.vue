@@ -26,7 +26,7 @@
 import { tomatoConfig } from "@/utils/const";
 import { ETomatoState, ETomatoType } from "@/utils/type";
 import { useIntervalFn } from "@vueuse/core";
-import { computed, ref } from "vue";
+import { computed } from "vue";
 import FinishComponent from "./components/finish.vue";
 import Pause from "./components/pause.vue";
 import Play from "./components/play.vue";
@@ -37,9 +37,9 @@ interface IEmits {
 
 const emits = defineEmits<IEmits>();
 const initTimeRef = defineModel<number>("time", { required: true });
+const tomatoState = defineModel<ETomatoState>("state");
 
 const { duration } = tomatoConfig[ETomatoType.CountDown];
-const tomatoState = ref(ETomatoState.INIT);
 
 const showTimeRef = computed(() => {
   const minute = Math.floor(initTimeRef.value / 60);

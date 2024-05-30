@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import ProgressMask from "@/components/ProgressMask/index.vue";
 import { tomatoConfig } from "@/utils/const";
-import { ETomatoRestState, ETomatoType } from "@/utils/type";
+import { ETomatoRestState, ETomatoState, ETomatoType } from "@/utils/type";
 import { ref, watch } from "vue";
 import useDrag from "./hooks/useDrag";
 import CountDown from "./views/countDown/index.vue";
@@ -9,6 +9,7 @@ import RestContDown from "./views/restCountDown/index.vue";
 
 const domRef = ref<HTMLElement>();
 const countDownType = ref(ETomatoType.CountDown);
+const countDownState = ref(ETomatoState.INIT);
 const restCountDownState = ref(ETomatoRestState.Timing);
 const countDownTime = ref(tomatoConfig[ETomatoType.CountDown].duration);
 const restCountDownTime = ref(tomatoConfig[ETomatoType.Rest].duration);
@@ -19,12 +20,14 @@ const { edgeRef } = useDrag(domRef);
 // 休息完成后的回调
 const onRestCountDownFinishCallback = () => {
   countDownType.value = ETomatoType.CountDown;
+  countDownState.value = ETomatoState.INIT;
   restCountDownState.value = ETomatoRestState.INIT;
 };
 
 // 工作计时完成后的回调
 const onClickStartRestCallback = () => {
   countDownType.value = ETomatoType.Rest;
+  countDownState.value = ETomatoState.Finish;
   restCountDownState.value = ETomatoRestState.Timing;
 };
 
@@ -44,20 +47,21 @@ watch(
 
 <template>
   <div ref="domRef" :class="style.container">
-    <div v-show="!edgeRef">
+    <div v-if="!edgeRef">
       <CountDown
+        v-model:state="countDownState"
         v-model:time="countDownTime"
         @on-click-start-rest="onClickStartRestCallback"
         v-show="countDownType === ETomatoType.CountDown"
       />
       <RestContDown
         v-model:time="restCountDownTime"
-        :state="restCountDownState"
+        v-model:state="restCountDownState"
         @onRestCountDownFinishCallback="onRestCountDownFinishCallback"
         v-show="countDownType === ETomatoType.Rest"
       />
     </div>
-    <ProgressMask :percentage="percentage" v-show="edgeRef" :direction="edgeRef" :class="style.progressMask" />
+    <ProgressMask :percentage="percentage" v-else :direction="edgeRef" :class="style.progressMask" />
   </div>
 </template>
 
