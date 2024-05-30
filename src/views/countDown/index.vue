@@ -36,9 +36,9 @@ interface IEmits {
 }
 
 const emits = defineEmits<IEmits>();
+const initTimeRef = defineModel<number>("time", { required: true });
 
 const { duration } = tomatoConfig[ETomatoType.CountDown];
-const initTimeRef = ref(duration);
 const tomatoState = ref(ETomatoState.INIT);
 
 const showTimeRef = computed(() => {

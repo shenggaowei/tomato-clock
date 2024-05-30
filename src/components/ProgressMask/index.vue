@@ -1,6 +1,6 @@
 <template>
   <div :class="style.container">
-    <ProgressBar :directions="progressDirection" :class="[style.content, progressClass]" />
+    <ProgressBar :percentage="percentage" :directions="progressDirection" :class="[style.content, progressClass]" />
   </div>
 </template>
 
@@ -12,10 +12,12 @@ import ProgressBar from "../Progress/index.vue";
 
 interface IProps {
   direction?: ENearTheScreenEdgeType;
+  percentage?: number;
 }
 
 const props = withDefaults(defineProps<IProps>(), {
   direction: ENearTheScreenEdgeType.BOTTOM,
+  percentage: 0,
 });
 const $style = useCssModule("style");
 

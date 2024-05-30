@@ -15,7 +15,7 @@
 import { tomatoConfig } from "@/utils/const";
 import { ETomatoRestState, ETomatoType } from "@/utils/type";
 import { useIntervalFn } from "@vueuse/core";
-import { computed, ref, toRef, watch } from "vue";
+import { computed, toRef, watch } from "vue";
 import Stop from "./components/stop.vue";
 
 interface IProps {
@@ -31,8 +31,8 @@ const props = withDefaults(defineProps<IProps>(), {
 });
 const emits = defineEmits<IEmits>();
 
+const initTimeRef = defineModel<number>("time", { required: true });
 const { duration } = tomatoConfig[ETomatoType.Rest];
-const initTimeRef = ref(duration);
 const tomatoRestState = toRef(props, "state");
 
 // 倒计时结束回调
@@ -104,6 +104,7 @@ const handleClickStop = () => {
   .maskContent {
     transition: visibility 0.3s, opacity 0.3s linear;
     visibility: hidden;
+    background: rgba(255, 255, 255, 0.95);
     opacity: 0;
   }
 }
