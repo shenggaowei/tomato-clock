@@ -1,4 +1,4 @@
-import { onMounted, ref, Ref } from "vue";
+import { onMounted, onUnmounted, ref, Ref } from "vue";
 
 
 export enum ENearTheScreenEdgeType {
@@ -25,7 +25,6 @@ function useDrag(ele: Ref<HTMLElement | undefined>) {
         x.value = 0;
         y.value = 0;
         document.removeEventListener("mousemove", moveEvent);
-        edgeRef.value = undefined
     };
 
     const moveEvent = (e: MouseEvent) => {
@@ -58,6 +57,10 @@ function useDrag(ele: Ref<HTMLElement | undefined>) {
             edgeRef.value = args.edge
         })
     });
+
+    onUnmounted(() => {
+        ele.value!.removeEventListener('mouseup', upEvent)
+    })
 
     return {
         edgeRef

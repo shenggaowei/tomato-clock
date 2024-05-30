@@ -87,16 +87,38 @@ async function createWindow() {
     const { width: screenWidth, height: screenHeight } = winScreen.bounds
     if (args.x + 80 >= screenWidth) {
       win.webContents.send('testWindowOnScreenEdge', { edge: ENearTheScreenEdgeType.RIGHT })
-      win.setBounds({ x: screenWidth - 20, y: args.y, width: 80, height: 40 })
+      win.setBounds({ x: screenWidth - 20, y: args.y })
     } else if (args.x <= 0) {
       win.webContents.send('testWindowOnScreenEdge', { edge: ENearTheScreenEdgeType.LEFT })
-      win.setBounds({ x: -60, y: args.y, width: 80, height: 40 })
+      win.setBounds({ x: -60, y: args.y })
     } else if (args.y + 40 >= screenHeight) {
       win.webContents.send('testWindowOnScreenEdge', { edge: ENearTheScreenEdgeType.BOTTOM })
-      win.setBounds({ x: args.x, y: screenHeight - 20, width: 80, height: 40 })
+      win.setBounds({ x: args.x, y: screenHeight - 20 })
     } else if (args.y <= 0) {
       win.webContents.send('testWindowOnScreenEdge', { edge: ENearTheScreenEdgeType.TOP })
-      win.setBounds({ x: args.x, y: -20, width: 80, height: 40 })
+      win.setBounds({ x: args.x, y: -20 })
+    } else {
+      win.webContents.send('testWindowOnScreenEdge', { edge: undefined })
+    }
+  })
+
+  // 鼠标悬浮后，显示时钟
+  ipcMain.on('onMouseEnter', (channel, args) => {
+    const { width: screenWidth, height: screenHeight } = winScreen.bounds
+    const { edge } = args
+    switch (edge) {
+      case ENearTheScreenEdgeType.TOP:
+        win.setBounds({ y: 0 })
+        break;
+      case ENearTheScreenEdgeType.BOTTOM:
+        win.setBounds({ y: screenHeight })
+        break;
+      case ENearTheScreenEdgeType.LEFT:
+        win.setBounds({ x: 0 });
+        break;
+      case ENearTheScreenEdgeType.RIGHT:
+        win.setBounds({ x: screenWidth })
+        break;
     }
   })
 

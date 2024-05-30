@@ -1,5 +1,5 @@
 <template>
-  <div :class="style.container">
+  <div :class="style.container" @mouseenter="onMouseEnter">
     <ProgressBar :percentage="percentage" :directions="progressDirection" :class="[style.content, progressClass]" />
   </div>
 </template>
@@ -20,6 +20,8 @@ const props = withDefaults(defineProps<IProps>(), {
   percentage: 0,
 });
 const $style = useCssModule("style");
+
+const onMouseEnter = (e: MouseEvent) => {};
 
 const progressDirection = computed(() => {
   switch (props.direction) {
