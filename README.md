@@ -26,7 +26,7 @@ The Pomodoro Technique is a simple and effective time management method. Using t
 2. Basic Pomodoro functionality. Done
 3. Customizable work and break times. Todo
 4. Display minimized icon in Windows system tray. Todo
-5. Snap to edge when dragged to the side of the window and display progress bar. Todo
+5. Snap to edge when dragged to the side of the window and display progress bar. Done
 6. Richer UI interactions. Todo
 7. Mac OS adaptation. Todo
 8. Display daily Pomodoro work dashboard. Todo

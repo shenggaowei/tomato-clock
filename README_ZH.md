@@ -24,7 +24,7 @@
 2. 番茄基本功能。 done
 3. 工作时间和休息时间可以自定义。todo
 4. 在 windows 的状态栏显示最小化 icon 图标。todo 
-5. 拖拽到 windows 边缘后，贴边并显示 progress 进度条。todo
+5. 拖拽到 windows 边缘后，贴边并显示 progress 进度条。done
 6. ui 交互设计更加丰富。todo
 7. 适配 mac os。todo
 8. 可显示每日番茄工作的 dashboard。todo
