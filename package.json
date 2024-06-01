@@ -44,7 +44,7 @@
   },
   "dependencies": {
     "@types/lodash-es": "^4.17.12",
-    "@vueuse/core": "^10.9.0",
+    "@vueuse/core": "^10.10.0",
     "dayjs": "^1.11.11",
     "element-plus": "^2.7.3",
     "lodash-es": "^4.17.21"
