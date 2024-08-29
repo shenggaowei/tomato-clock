@@ -68,7 +68,7 @@ async function createWindow() {
     frame: false,
     resizable: false,
     transparent: true,
-    alwaysOnTop: true,
+    //alwaysOnTop: true,
     webPreferences: {
       preload,
       // Warning: Enable nodeIntegration and disable contextIsolation is not secure in production
@@ -105,8 +105,8 @@ async function createWindow() {
   // 鼠标悬浮后，显示时钟
   ipcMain.on('onMouseEnter', (channel, args) => {
     const { width: screenWidth, height: screenHeight } = winScreen.bounds
-    const { edge } = args
-    switch (edge) {
+    const { direction } = args
+    switch (direction) {
       case ENearTheScreenEdgeType.TOP:
         win.setBounds({ y: 0 })
         break;
@@ -138,7 +138,7 @@ async function createWindow() {
   if (VITE_DEV_SERVER_URL) { // #298
     win.loadURL(VITE_DEV_SERVER_URL)
     // Open devTool if the app is not packaged
-    // win.webContents.openDevTools({ mode: 'detach' })
+    win.webContents.openDevTools({ mode: 'detach' })
   } else {
     win.loadFile(indexHtml)
   }

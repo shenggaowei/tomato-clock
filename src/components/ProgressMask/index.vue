@@ -21,7 +21,9 @@ const props = withDefaults(defineProps<IProps>(), {
 });
 const $style = useCssModule("style");
 
-const onMouseEnter = (e: MouseEvent) => {};
+const onMouseEnter = (e: MouseEvent) => {
+  console.log("onMouseEnter");
+};
 
 const progressDirection = computed(() => {
   switch (props.direction) {
