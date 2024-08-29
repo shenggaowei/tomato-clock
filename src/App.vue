@@ -47,7 +47,7 @@ watch(
 
 <template>
   <div ref="domRef" :class="style.container">
-    <div v-if="!edgeRef">
+    <div v-show="!edgeRef">
       <CountDown
         v-model:state="countDownState"
         v-model:time="countDownTime"
@@ -61,7 +61,7 @@ watch(
         v-show="countDownType === ETomatoType.Rest"
       />
     </div>
-    <ProgressMask :percentage="percentage" v-else :direction="edgeRef" :class="style.progressMask" />
+    <ProgressMask :percentage="percentage" v-show="edgeRef" :direction="edgeRef" :class="style.progressMask" />
   </div>
 </template>
 
