@@ -1,6 +1,5 @@
 import { onMounted, onUnmounted, ref, Ref } from "vue";
 
-
 export enum ENearTheScreenEdgeType {
     TOP = "top",
     BOTTOM = "bottom",
@@ -41,9 +40,16 @@ function useDrag(ele: Ref<HTMLElement | undefined>) {
         x.value = 0;
         y.value = 0;
         document.removeEventListener("mousemove", moveEvent);
+        ele.value!.removeEventListener("mouseup", upEvent, true);
     };
 
+    /**
+     * 鼠标移动事件
+     * screenX, screenY 鼠标在屏幕上的坐标
+     * x, y 鼠标在元素上的坐标
+     **/
     const moveEvent = (e: MouseEvent) => {
+        // x y 元素左上角的坐标，也就是元素要移动到的坐标
         window.ipcRenderer.send("suspensionWindowMove", {
             x: e.screenX - x.value,
             y: e.screenY - y.value,
@@ -65,7 +71,6 @@ function useDrag(ele: Ref<HTMLElement | undefined>) {
                     break;
             }
         });
-        ele.value!.addEventListener("mouseup", upEvent);
     };
 
     onMounted(() => {
